@@ -5,6 +5,8 @@ from PIL import Image, ImageTk
 import numpy as np
 
 IMG_WIDTH = 500
+PAD_Y = 10
+PAD_X = 10
 
 ######## Conditions functions ##########
 
@@ -66,7 +68,7 @@ def show_images(original_image):
     label_negative.image = None
 
     # Hiển thị button Apply Filter
-    button_apply_filter.pack(pady=10)
+    button_apply_filter.pack(pady=PAD_Y)
 
 ######## Common functions #########
 
@@ -270,7 +272,7 @@ frame_inside_canvas = tk.Frame(canvas)
 
 # Tạo nút và hộp chọn tệp tin
 button_open = tk.Button(frame_inside_canvas, text="Open Image", command=open_file)
-button_open.pack(pady=10)
+button_open.pack(pady=PAD_Y)
 
 # Tạo dòng chứa 2 cột
 frame_row = tk.Frame(frame_inside_canvas)
@@ -278,39 +280,39 @@ frame_row.pack()
 
 # Cột chứa label ảnh gốc
 label_original = tk.Label(frame_row, text="Original Image")
-label_original.pack(side=tk.LEFT, padx=10)
+label_original.pack(side=tk.LEFT, padx=PAD_X)
 
 # Cột chứa label ảnh sau khi chỉnh sửa
 label_negative = tk.Label(frame_row, text="Edited Image")
-label_negative.pack(side=tk.LEFT, padx=10)
+label_negative.pack(side=tk.LEFT, padx=PAD_X)
 
 # Tạo nút áp dụng bộ lọc âm bản 
 button_apply_filter = tk.Button(frame_inside_canvas, text="Apply Negative Filter", command=lambda: apply_filter_and_display(apply_negative))
-button_apply_filter.pack(pady=10)
+button_apply_filter.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc chuyển sang grayscale 
 button_apply_grayscale = tk.Button(frame_inside_canvas, text="Apply Grayscale Filter", command=lambda: apply_filter_and_display(apply_grayscale))
-button_apply_grayscale.pack(pady=10)
+button_apply_grayscale.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc phân ngưỡng 
 button_apply_threshold = tk.Button(frame_inside_canvas, text="Apply Threshold Filter", command=apply_threshold_and_display)
-button_apply_threshold.pack(pady=10)
+button_apply_threshold.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc cân bằng lược đồ xám 
 button_apply_histogram_equalization = tk.Button(frame_inside_canvas, text="Apply Histogram Equalization", command=lambda: apply_filter_and_display(apply_histogram_equalization))
-button_apply_histogram_equalization.pack(pady=10)
+button_apply_histogram_equalization.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc trung bình có trọng số 
 button_apply_weighted_mean = tk.Button(frame_inside_canvas, text="Apply Weighted Mean Filter", command=apply_weighted_mean_and_display)
-button_apply_weighted_mean.pack(pady=10)
+button_apply_weighted_mean.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc k giá trị gần nhất (đang lỗi)
 button_apply_k_nearest_mean_filter = tk.Button(frame_inside_canvas, text="Apply k-Nearest Mean Filter", command=apply_k_nearest_mean_filter_and_display)
-button_apply_k_nearest_mean_filter.pack(pady=10)
+button_apply_k_nearest_mean_filter.pack(pady=PAD_Y)
 
 # Tạo nút áp dụng bộ lọc trung vị 
 button_apply_median_filter = tk.Button(frame_inside_canvas, text="Apply Median Filter", command=apply_median_filter_and_display)
-button_apply_median_filter.pack(pady=10)
+button_apply_median_filter.pack(pady=PAD_Y)
 
 ############ Build layout #############
 
