@@ -6,6 +6,8 @@ import numpy as np
 
 IMG_WIDTH = 500
 
+######## Conditions functions ##########
+
 def is_valid_kernel_size(input_text):
     """Kiểm tra xem giá trị nhập vào có phải là số nguyên lẻ không."""
     try:
@@ -22,6 +24,9 @@ def is_valid_k_value(input_text):
     except ValueError:
         return False
 
+######## Conditions functions ##########
+
+######## Common functions #########
 def resize_image(image, target_width):
     """Chỉnh kích thước ảnh với chiều rộng mong muốn."""
     aspect_ratio = image.shape[1] / image.shape[0]
@@ -63,13 +68,22 @@ def show_images(original_image):
     # Hiển thị button Apply Filter
     button_apply_filter.pack(pady=10)
 
+######## Common functions #########
+
+
+######## Algorithm functions #########
+
 def apply_negative(image):
     """Áp dụng âm bản lên ảnh."""
     return 255 - image
 
+# --------------------------------
+
 def apply_grayscale(image):
     """Chuyển ảnh sang dạng grayscale."""
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# --------------------------------
 
 def apply_threshold(image, threshold_value):
     """Áp dụng bộ lọc phân ngưỡng cho ảnh."""
@@ -92,6 +106,8 @@ def apply_threshold_and_display():
             label_negative.config(image=thresholded_img)
             label_negative.image = thresholded_img
 
+# --------------------------------
+
 def apply_weighted_mean(image, kernel_size):
     """Áp dụng bộ lọc trung bình có trọng số cho ảnh."""
     kernel = np.ones((kernel_size, kernel_size), np.float32) / (kernel_size * kernel_size)
@@ -113,6 +129,8 @@ def apply_weighted_mean_and_display():
             # Hiển thị ảnh sau khi chỉnh sửa
             label_negative.config(image=weighted_mean_filtered_img)
             label_negative.image = weighted_mean_filtered_img
+
+# --------------------------------
 
 def apply_k_nearest_mean(image, k, threshold):
     """Áp dụng bộ lọc k giá trị gần nhất cho ảnh."""
@@ -155,6 +173,8 @@ def apply_k_nearest_mean_filter_and_display():
                 label_negative.config(image=k_nearest_mean_filtered_img)
                 label_negative.image = k_nearest_mean_filtered_img
 
+# --------------------------------
+
 def median_filter(image, kernel_size):
     result = np.zeros_like(image)
 
@@ -168,6 +188,7 @@ def median_filter(image, kernel_size):
 
     return np.uint8(result)
 
+# Hàm áp dụng bộ lọc trung vị
 def apply_median_filter_and_display():
     global original_image
     if original_image is not None:
@@ -183,6 +204,9 @@ def apply_median_filter_and_display():
             label_negative.config(image=median_filtered_img)
             label_negative.image = median_filtered_img
 
+# --------------------------------
+
+# Hàm áp dụng cân bằng lược đồ xám
 def apply_histogram_equalization(image):
     # Chuyển ảnh sang ảnh xám nếu là ảnh màu
     if len(image.shape) == 3:
@@ -203,6 +227,8 @@ def apply_histogram_equalization(image):
 
     return result
 
+# --------------------------------
+
 def apply_filter_and_display(filter_function):
     """Áp dụng bộ lọc và hiển thị kết quả."""
     global original_image
@@ -216,6 +242,9 @@ def apply_filter_and_display(filter_function):
         # Hiển thị ảnh sau khi chỉnh sửa
         label_negative.config(image=filtered_img)
         label_negative.image = filtered_img
+
+######## Algorithm functions #########
+
 
 # Tạo cửa sổ tkinter
 root = tk.Tk()
@@ -236,7 +265,8 @@ scrollbar.pack(side="right", fill="y")
 # Tạo frame bên trong canvas để chứa nội dung
 frame_inside_canvas = tk.Frame(canvas)
 
-############ Tạo layout cho cửa sổ #############
+
+############ Build layout #############
 
 # Tạo nút và hộp chọn tệp tin
 button_open = tk.Button(frame_inside_canvas, text="Open Image", command=open_file)
@@ -282,9 +312,8 @@ button_apply_k_nearest_mean_filter.pack(pady=10)
 button_apply_median_filter = tk.Button(frame_inside_canvas, text="Apply Median Filter", command=apply_median_filter_and_display)
 button_apply_median_filter.pack(pady=10)
 
+############ Build layout #############
 
-
-############ Tạo layout cho cửa sổ #############
 
 # Đặt nội dung của canvas là frame_inside_canvas
 canvas.create_window((0, 0), window=frame_inside_canvas, anchor="nw")
