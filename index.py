@@ -42,7 +42,6 @@ def apply_filter(image, filter_function):
 
 def open_file():
     """Mở hộp thoại để chọn một tệp tin ảnh."""
-    # file_path = 'backend/python/template.jpg'
     file_path = filedialog.askopenfilename()
     if file_path:
         load_and_display_original(file_path)
@@ -68,8 +67,6 @@ def show_images(original_image):
     label_filtered.config(image=None)
     label_filtered.image = None
 
-    # Hiển thị button Apply Filter
-    # button_apply_filter.pack(pady=PAD_Y)
 
 def apply_filter_and_display(filter_function):
     """Áp dụng bộ lọc và hiển thị kết quả."""
@@ -134,11 +131,11 @@ def logarithmic_transformation(image, c=1):
     # Áp dụng biến đổi logarithmic
     result = c * np.log1p(image)
 
-    # Chuyển đổi kiểu dữ liệu về uint8
-    result = np.uint8(result)
-
     # Chuẩn hóa giá trị pixel về khoảng [0, 255]
     result = ((result - np.min(result)) / (np.max(result) - np.min(result))) * 255.0
+
+    # Chuyển đổi kiểu dữ liệu về uint8
+    result = np.uint8(result)
 
     return result
 
@@ -168,11 +165,11 @@ def power_law_transformation(image, gamma=1, c=1):
     # Áp dụng biến đổi hàm mũ
     result = c * np.power(image, gamma)
 
-    # Chuyển đổi kiểu dữ liệu về uint8
-    result = np.uint8(result)
-
     # Chuẩn hóa giá trị pixel về khoảng [0, 255]
     result = ((result - np.min(result)) / (np.max(result) - np.min(result))) * 255.0
+
+    # Chuyển đổi kiểu dữ liệu về uint8
+    result = np.uint8(result)
 
     return result
 
@@ -605,95 +602,49 @@ frame_inside_canvas = tk.Frame(canvas)
 
 # Tạo nút và hộp chọn tệp tin
 button_open = tk.Button(frame_inside_canvas, text="Open Image", command=open_file)
-button_open.pack(pady=PAD_Y)
-
-# Tạo dòng chứa 2 cột
-frame_row = tk.Frame(frame_inside_canvas)
-frame_row.pack()
+button_open.grid(row=0, column=0, padx=PAD_X, pady=PAD_Y)
+tk.Label(frame_inside_canvas, text="* Resize window để xuất hiện scrollbar").grid(row=0, column=1, padx=PAD_X, pady=PAD_Y)
 
 # Cột chứa label ảnh gốc
-label_original = tk.Label(frame_row, text="Original Image")
-label_original.pack(side=tk.LEFT, padx=PAD_X)
+label_original = tk.Label(frame_inside_canvas, text="Original Image")
+label_original.grid(row=1, column=0, padx=PAD_X, pady=PAD_Y)
 
 # Cột chứa label ảnh sau khi chỉnh sửa
-label_filtered = tk.Label(frame_row, text="Edited Image")
-label_filtered.pack(side=tk.LEFT, padx=PAD_X)
+label_filtered = tk.Label(frame_inside_canvas, text="Edited Image")
+label_filtered.grid(row=1, column=1, padx=PAD_X, pady=PAD_Y)
 
-# Tạo nút áp dụng bộ lọc âm bản 
-button_apply_filter = tk.Button(frame_inside_canvas, text="Apply Negative Filter", command=lambda: apply_filter_and_display(apply_negative))
-button_apply_filter.pack(pady=PAD_Y)
+# Mở sẵn 1 ảnh
+load_and_display_original("backend/python/oggy.jpeg")
 
-# Tạo nút áp dụng bộ lọc chuyển sang grayscale 
-button_apply_grayscale = tk.Button(frame_inside_canvas, text="Apply Grayscale Filter", command=lambda: apply_filter_and_display(apply_grayscale))
-button_apply_grayscale.pack(pady=PAD_Y)
+# List button
+button_info_list = [
+    ("Apply Negative Filter", lambda: apply_filter_and_display(apply_negative)),
+    ("Apply Grayscale Filter", lambda: apply_filter_and_display(apply_grayscale)),
+    ("Apply Threshold Filter", apply_threshold_and_display),
+    ("Apply Logarithmic Transformation", apply_logarithmic_transformation_and_display),
+    ("Apply Power Law Transformation",  apply_power_law_transformation_and_display),
+    ("Apply Histogram Equalization", lambda: apply_filter_and_display(apply_histogram_equalization)),
+    ("Apply Weighted Mean Filter", apply_weighted_mean_and_display),
+    ("Apply k-Nearest Mean Filter", apply_k_nearest_mean_filter_and_display),
+    ("Apply Median Filter", apply_median_filter_and_display),
+    ("Apply Roberts Operator", lambda: apply_filter_and_display(apply_roberts_operator)),
+    ("Apply Prewitt Operator", lambda: apply_filter_and_display(apply_prewitt_operator)),
+    ("Apply Sobel Operator", lambda: apply_filter_and_display(apply_sobel_operator)),
+    ("Apply Laplacian Operator", lambda: apply_filter_and_display(apply_laplacian_operator)),
+    ("Apply Canny Algorithm", apply_canny_algorithm_and_display),
+    ("Apply Otsu Algorithm", lambda: apply_filter_and_display(apply_otsu_algorithm)),
+    ("Apply Erosion Operation", apply_erosion_operation_and_display),
+    ("Apply Dilation Operation", apply_dilation_operation_and_display),
+    ("Apply Opening Operation", apply_opening_operation_and_display),
+    ("Apply Closing Operation", apply_closing_operation_and_display)
+]
 
-# Tạo nút áp dụng bộ lọc phân ngưỡng 
-button_apply_threshold = tk.Button(frame_inside_canvas, text="Apply Threshold Filter", command=apply_threshold_and_display)
-button_apply_threshold.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng biến đổi logarithmic 
-button_apply_logarithmic_transformation = tk.Button(frame_inside_canvas, text="Apply Logarithmic Transformation", command=apply_logarithmic_transformation_and_display)
-button_apply_logarithmic_transformation.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng biến đổi hàm mũ 
-button_apply_power_law_transformation = tk.Button(frame_inside_canvas, text="Apply Power Law Transformation", command=apply_power_law_transformation_and_display)
-button_apply_power_law_transformation.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng bộ lọc cân bằng lược đồ xám 
-button_apply_histogram_equalization = tk.Button(frame_inside_canvas, text="Apply Histogram Equalization", command=lambda: apply_filter_and_display(apply_histogram_equalization))
-button_apply_histogram_equalization.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng bộ lọc trung bình có trọng số 
-button_apply_weighted_mean = tk.Button(frame_inside_canvas, text="Apply Weighted Mean Filter", command=apply_weighted_mean_and_display)
-button_apply_weighted_mean.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng bộ lọc k giá trị gần nhất
-button_apply_k_nearest_mean_filter = tk.Button(frame_inside_canvas, text="Apply k-Nearest Mean Filter", command=apply_k_nearest_mean_filter_and_display)
-button_apply_k_nearest_mean_filter.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng bộ lọc trung vị 
-button_apply_median_filter = tk.Button(frame_inside_canvas, text="Apply Median Filter", command=apply_median_filter_and_display)
-button_apply_median_filter.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng toán tử Roberts 
-button_apply_roberts_operator = tk.Button(frame_inside_canvas, text="Apply Roberts Operator", command=lambda: apply_filter_and_display(apply_roberts_operator))
-button_apply_roberts_operator.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng toán tử Prewitt 
-button_apply_prewitt_operator = tk.Button(frame_inside_canvas, text="Apply Prewitt Operator", command=lambda: apply_filter_and_display(apply_prewitt_operator))
-button_apply_prewitt_operator.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng toán tử Sobel 
-button_apply_sobel_operator = tk.Button(frame_inside_canvas, text="Apply Sobel Operator", command=lambda: apply_filter_and_display(apply_sobel_operator))
-button_apply_sobel_operator.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng toán tử Laplacian 
-button_apply_laplacian_operator = tk.Button(frame_inside_canvas, text="Apply Laplacian Operator", command=lambda: apply_filter_and_display(apply_laplacian_operator))
-button_apply_laplacian_operator.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng thuật toán Canny 
-button_apply_canny_algorithm = tk.Button(frame_inside_canvas, text="Apply Canny Algorithm", command=apply_canny_algorithm_and_display)
-button_apply_canny_algorithm.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng thuật toán Otsu 
-button_apply_otsu_algorithm = tk.Button(frame_inside_canvas, text="Apply Otsu Algorithm", command=lambda: apply_filter_and_display(apply_otsu_algorithm))
-button_apply_otsu_algorithm.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng phép co 
-button_apply_erosion_operation = tk.Button(frame_inside_canvas, text="Apply Erosion Operation", command=apply_erosion_operation_and_display)
-button_apply_erosion_operation.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng phép giãn hình 
-button_apply_dilation_operation = tk.Button(frame_inside_canvas, text="Apply Dilation Operation", command=apply_dilation_operation_and_display)
-button_apply_dilation_operation.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng phép mở 
-button_apply_opening_operation = tk.Button(frame_inside_canvas, text="Apply Opening Operation", command=apply_opening_operation_and_display)
-button_apply_opening_operation.pack(pady=PAD_Y)
-
-# Tạo nút áp dụng phép đóng 
-button_apply_closing_operation = tk.Button(frame_inside_canvas, text="Apply Closing Operation", command=apply_closing_operation_and_display)
-button_apply_closing_operation.pack(pady=PAD_Y)
+num_columns = 2
+for i, (button_text, command) in enumerate(button_info_list):
+    row = 3 + i // num_columns
+    column = i % num_columns
+    button_apply_filter = tk.Button(frame_inside_canvas, text=button_text, command=command)
+    button_apply_filter.grid(row=row, column=column, padx=PAD_X, pady=PAD_Y)
 
 ############ Build layout #############
 
